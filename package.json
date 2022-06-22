@@ -1,0 +1,35 @@
+{
+  "name": "admin-test",
+  "version": "0.0.1",
+  "description": "AdminJS app test instance",
+  "main": "index.js",
+  "author": "JMW",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon"
+  },
+  "dependencies": {
+    "@adminjs/express": "^4.1.3",
+    "@adminjs/mongoose": "^2.0.3",
+    "@adminjs/passwords": "^2.0.2",
+    "@adminjs/sequelize": "^2.1.5",
+    "adminjs": "^5.10.4",
+    "argon2": "^0.28.5",
+    "express": "^4.18.1",
+    "express-formidable": "^1.2.0",
+    "express-session": "^1.17.3",
+    "mongoose": "^6.4.0",
+    "nodemon": "^2.0.16",
+    "pg": "^8.7.3",
+    "sequelize": "^6.21.0",
+    "tslib": "^2.4.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.1",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.30.0"
+  }
+}
