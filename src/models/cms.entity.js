@@ -1,10 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const CmsSchema = new mongoose.Schema({
-	title: String,
-	content: String,
+  title: String,
+  content: String,
+  amount: String,
 });
 
-const Cms = mongoose.model('cms', CmsSchema);
+const Cms = mongoose.model("cms", CmsSchema);
 
 module.exports = Cms;

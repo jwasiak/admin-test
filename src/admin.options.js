@@ -1,26 +1,26 @@
-const AdminJS = require('adminjs')
-const argon2 = require('argon2')
-const hashPassword = require('@adminjs/passwords')
+const AdminJS = require("adminjs");
+const argon2 = require("argon2");
+const hashPassword = require("@adminjs/passwords");
 
 // postgres
-const Users = require('./models/user.entity')
-const Logs = require('./models/log.entity')
-//mongodb
-require('./config/mongo.connection')
-const Blog = require('./models/blog.entity')
-const Companies = require('./models/company.entity')
-const Cms = require('./models/cms.entity')
+const Users = require("./models/user.entity");
+const Logs = require("./models/log.entity");
+// mongodb
+require("./config/mongo.connection");
+const Blog = require("./models/blog.entity");
+const Companies = require("./models/company.entity");
+const Cms = require("./models/cms.entity");
 
 const companiesBeforeNew = async (request) => {
   if (request.payload.password) {
-    console.log('new password'.request.payload.password)
+    console.log("new password".request.payload.password);
     request.payload = {
       ...request.payload,
       encryptedPassword: await argon2.hash(request.payload.password, 10),
       password: undefined,
-    }
+    };
   }
-  return request
+  return request;
 
   // if (request.method === 'post') {
   // 	const { password, ...otherParams } = request.payload;
@@ -35,19 +35,19 @@ const companiesBeforeNew = async (request) => {
   // 		};
   // 	}
   // }
-}
+};
 
 const companiesBeforeEdit = async (request) => {
   if (request.payload.password) {
-    console.log('edit password'.request.payload.password)
+    console.log("edit password".request.payload.password);
     request.payload = {
       ...request.payload,
       encryptedPassword: await argon2.hash(request.payload.password, 10),
       password: undefined,
-    }
+    };
   }
-  return request
-}
+  return request;
+};
 
 const options = {
   resources: [
@@ -55,8 +55,26 @@ const options = {
       resource: Cms,
       options: {
         dashboard: {
-          component: AdminJS.bundle('./components/my-dashboard-component'),
+          component: AdminJS.bundle("./components/my-dashboard-component"),
         },
+        listProperties: ["title", "content", "amount"],
+
+        properties: {
+          content: {
+            type: "textarea",
+            isSortable: false,
+          },
+          amount: {
+            type: "currency",
+            props: {
+              decimalSeparator: ".",
+              decimalScale: 2,
+              groupSeparator: " ",
+              intlConfig: { locale: "pl-PL", currency: "PLN" },
+            },
+          },
+        },
+
         // content: {
         // 	type: 'richtext',
         // 	custom: {
@@ -75,9 +93,9 @@ const options = {
           // },
           myResourceAction: {
             // handler of a bulkAction should return an Array of RecordJSON object
-            actionType: 'resource',
+            actionType: "resource",
             handler: (request, response, context) => {
-              console.log(request)
+              console.log(request);
               // console.log('record', context.record);
               // const cms = context.record;
               // return {
@@ -85,14 +103,14 @@ const options = {
               // };
             },
             component: AdminJS.bundle(
-              './components/my-resource-action-component'
+              "./components/my-resource-action-component"
             ),
           },
           myBulkAction: {
             // handler of a bulkAction should return an Array of RecordJSON object
-            actionType: 'bulk',
+            actionType: "bulk",
             handler: (request, response, context) => {
-              console.log(request)
+              console.log(request);
               // console.log('record', context.record);
               // const cms = context.record;
               // return {
@@ -102,16 +120,16 @@ const options = {
             // component: AdminJS.bundle('./components//my-action-component'),
           },
           playTheGame: {
-            icon: 'View',
-            actionType: 'record',
+            icon: "View",
+            actionType: "record",
             handler: (request, response, context) => {
-              console.log('record', context.record)
-              const cms = context.record
+              console.log("record", context.record);
+              const cms = context.record;
               return {
                 record: cms.toJSON(context.currentAdmin),
-              }
+              };
             },
-            component: AdminJS.bundle('./components//my-action-component'),
+            component: AdminJS.bundle("./components//my-action-component"),
           },
         },
       },
@@ -119,7 +137,7 @@ const options = {
     {
       resource: Logs,
       options: {
-        listProperties: ['userId', 'logDate', 'details'],
+        listProperties: ["userId", "logDate", "details"],
         properties: {
           id: {
             show: true,
@@ -214,10 +232,10 @@ const options = {
       resource: Companies,
       options: {
         listProperties: [
-          'companyName',
-          'address',
-          'email',
-          'encryptedPassword',
+          "companyName",
+          "address",
+          "email",
+          "encryptedPassword",
         ],
         properties: {
           encryptedPassword: {
@@ -239,8 +257,8 @@ const options = {
       features: [
         hashPassword({
           properties: {
-            encryptedPassword: 'encryptedPassword',
-            password: 'password',
+            encryptedPassword: "encryptedPassword",
+            password: "password",
           },
           hash: argon2.hash,
         }),
@@ -248,19 +266,25 @@ const options = {
     },
     {
       resource: Blog,
+
       options: {
-      properties: {
+        listProperties: ["title", "author", "body"],
+        properties: {
           body: {
-            type: 'richtext',
+            type: "richtext",
+            isSortable: false,
+            custom: {
+              maxLength: 30,
+            },
           },
         },
       },
-    }
+    },
   ],
 
-  rootPath: '/admin',
+  rootPath: "/admin",
   branding: {
-    companyName: 'RST Ltd',
+    companyName: "RST Ltd",
   },
 
   locale: {
@@ -270,10 +294,8 @@ const options = {
         welcomeOnBoard_title: "Witaj AdminJS",
       },
     },
-    availableLanguages: ['pl', 'en', 'ua'],
+    availableLanguages: ["pl", "en", "ua"],
   },
-}
- 
-module.exports = options
+};
 
-
+module.exports = options;
